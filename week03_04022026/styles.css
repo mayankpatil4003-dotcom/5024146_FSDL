@@ -1,0 +1,323 @@
+/* ==================== Global Styles ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Background Styling */
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ==================== Font Styling ==================== */
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+    font-family: 'Arial', sans-serif;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333333;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+p, label {
+    font-size: 1rem;
+    color: #555555;
+    line-height: 1.6;
+}
+
+/* ==================== Container Styling ==================== */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    padding: 40px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* ==================== Input Section ==================== */
+.input-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+/* CSS3 Pseudo-class: :focus */
+input[type="text"]:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+}
+
+button {
+    padding: 12px 25px;
+    background-color: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* CSS3 Pseudo-class: :hover */
+button:hover {
+    background-color: #764ba2;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* CSS3 Pseudo-class: :active */
+button:active {
+    transform: translateY(0);
+}
+
+/* ==================== Lists Styling ==================== */
+.todo-list {
+    list-style: none;
+    margin-bottom: 30px;
+}
+
+.todo-item {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-left: 4px solid #667eea;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+/* CSS3 Pseudo-class: :nth-child() */
+.todo-item:nth-child(odd) {
+    background-color: #f0f4ff;
+}
+
+/* CSS3 Pseudo-class: :nth-child(even) */
+.todo-item:nth-child(even) {
+    background-color: #ffffff;
+}
+
+/* CSS3 Pseudo-class: :hover */
+.todo-item:hover {
+    box-shadow: 0 3px 10px rgba(102, 126, 234, 0.2);
+    transform: translateX(5px);
+}
+
+/* CSS3 Pseudo-class: :first-child */
+.todo-item:first-child {
+    margin-top: 0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* CSS3 Pseudo-class: :last-child */
+.todo-item:last-child {
+    margin-bottom: 0;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* CSS3 Pseudo-element: ::before */
+.todo-item::before {
+    content: "✓";
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background-color: #667eea;
+    color: white;
+    text-align: center;
+    line-height: 25px;
+    border-radius: 50%;
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.todo-item.completed::before {
+    background-color: #4caf50;
+    content: "✔";
+}
+
+/* CSS3 Pseudo-element: ::after */
+.todo-item::after {
+    content: " - Click to mark complete";
+    font-size: 0.8rem;
+    color: #999;
+    opacity: 0;
+}
+
+.todo-item:hover::after {
+    opacity: 1;
+}
+
+.todo-text {
+    flex: 1;
+    font-size: 1rem;
+    color: #333;
+}
+
+.todo-item.completed .todo-text {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* ==================== Tables Styling ==================== */
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* CSS3 Selector: Attribute Selector */
+table[class="stats-table"] {
+    background-color: #ffffff;
+}
+
+.stats-table thead {
+    background-color: #667eea;
+    color: white;
+}
+
+.stats-table th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.stats-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #333;
+}
+
+/* CSS3 Pseudo-class: :nth-of-type() */
+.stats-table tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.stats-table tbody tr:nth-of-type(even) {
+    background-color: #ffffff;
+}
+
+/* CSS3 Pseudo-class: :hover on table rows */
+.stats-table tbody tr:hover {
+    background-color: #f0f4ff;
+    cursor: pointer;
+}
+
+/* CSS3 Pseudo-class: :first-of-type and :last-of-type */
+.stats-table th:first-of-type {
+    border-top-left-radius: 8px;
+}
+
+.stats-table th:last-of-type {
+    border-top-right-radius: 8px;
+}
+
+/* ==================== Empty State ==================== */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+/* CSS3 Pseudo-element: ::before for decorative icon */
+.empty-state::before {
+    content: "📝";
+    display: block;
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+/* ==================== Footer ==================== */
+footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px;
+    color: #ffffff;
+    font-size: 0.9rem;
+}
+
+/* CSS3 Selector: Descendant combinator */
+footer p {
+    color: #ffffff;
+}
+
+/* CSS3 Selector: Child combinator */
+footer > p {
+    margin: 5px 0;
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .input-section {
+        flex-direction: column;
+    }
+
+    .todo-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .delete-btn {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .stats-table {
+        font-size: 0.9rem;
+    }
+
+    .stats-table th, .stats-table td {
+        padding: 8px;
+    }
+}

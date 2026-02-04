@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List Application</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 My Todo List</h1>
+            <p>Keep track of your daily tasks and stay productive</p>
+        </div>
+
+        <div class="input-section">
+            <input type="text" id="todoInput" placeholder="Add a new task...">
+            <button id="addBtn">Add Task</button>
+        </div>
+
+        <div id="todoContainer">
+            <ul class="todo-list" id="todoList">
+                <!-- Sample Todo Items -->
+                <li class="todo-item">
+                    <span class="todo-text">Complete HTML project</span>
+                    <button class="delete-btn">Delete</button>
+                </li>
+                <li class="todo-item">
+                    <span class="todo-text">Learn CSS3 features</span>
+                    <button class="delete-btn">Delete</button>
+                </li>
+                <li class="todo-item completed">
+                    <span class="todo-text">Study JavaScript basics</span>
+                    <button class="delete-btn">Delete</button>
+                </li>
+            </ul>
+        </div>
+
+        <h2>Statistics</h2>
+        <table class="stats-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Count</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total Tasks</td>
+                    <td>3</td>
+                    <td>100%</td>
+                </tr>
+                <tr>
+                    <td>Completed</td>
+                    <td>1</td>
+                    <td>33%</td>
+                </tr>
+                <tr>
+                    <td>Pending</td>
+                    <td>2</td>
+                    <td>67%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Todo List Application</p>
+        <p>Built with HTML & CSS</p>
+    </footer>
+
+    <script>
+        // Simple JavaScript to demonstrate interactivity
+        document.getElementById('addBtn').addEventListener('click', function() {
+            const input = document.getElementById('todoInput');
+            if (input.value.trim()) {
+                const li = document.createElement('li');
+                li.className = 'todo-item';
+                li.innerHTML = `
+                    <span class="todo-text">${input.value}</span>
+                    <button class="delete-btn">Delete</button>
+                `;
+                document.getElementById('todoList').appendChild(li);
+                input.value = '';
+                input.focus();
+            }
+        });
+
+        // Event delegation for delete buttons
+        document.getElementById('todoList').addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete-btn')) {
+                e.target.closest('.todo-item').remove();
+            }
+            if (e.target.classList.contains('todo-text')) {
+                e.target.closest('.todo-item').classList.toggle('completed');
+            }
+        });
+
+        // Allow Enter key to add task
+        document.getElementById('todoInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('addBtn').click();
+            }
+        });
+    </script>
+</body>
+</html>
