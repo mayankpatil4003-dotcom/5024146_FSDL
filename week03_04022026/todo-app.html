@@ -1,108 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List Application</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Todo List Application</title>
+  <!-- Bootstrap CSS (v5) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Small utility to mimic older jumbotron look if desired */
+    .jumbotron-hero { padding: 2rem 1rem; background: #f8f9fa; border-radius: .5rem; }
+    .todo-text.completed { text-decoration: line-through; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📋 My Todo List</h1>
-            <p>Keep track of your daily tasks and stay productive</p>
-        </div>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">TodoApp</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-controls="navmenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <div class="input-section">
-            <input type="text" id="todoInput" placeholder="Add a new task...">
-            <button id="addBtn">Add Task</button>
-        </div>
+      <div class="collapse navbar-collapse" id="navmenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-        <div id="todoContainer">
-            <ul class="todo-list" id="todoList">
-                <!-- Sample Todo Items -->
-                <li class="todo-item">
-                    <span class="todo-text">Complete HTML project</span>
-                    <button class="delete-btn">Delete</button>
-                </li>
-                <li class="todo-item">
-                    <span class="todo-text">Learn CSS3 features</span>
-                    <button class="delete-btn">Delete</button>
-                </li>
-                <li class="todo-item completed">
-                    <span class="todo-text">Study JavaScript basics</span>
-                    <button class="delete-btn">Delete</button>
-                </li>
-            </ul>
-        </div>
+  <div class="container my-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Todo</li>
+      </ol>
+    </nav>
 
-        <h2>Statistics</h2>
-        <table class="stats-table">
-            <thead>
-                <tr>
-                    <th>Metric</th>
-                    <th>Count</th>
-                    <th>Percentage</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Total Tasks</td>
-                    <td>3</td>
-                    <td>100%</td>
-                </tr>
-                <tr>
-                    <td>Completed</td>
-                    <td>1</td>
-                    <td>33%</td>
-                </tr>
-                <tr>
-                    <td>Pending</td>
-                    <td>2</td>
-                    <td>67%</td>
-                </tr>
-            </tbody>
-        </table>
+    <!-- Jumbotron / Hero -->
+    <div class="jumbotron-hero mb-4">
+      <div class="container-fluid py-2">
+        <h1 class="display-6">📋 My Todo List</h1>
+        <p class="lead mb-0">Keep track of your daily tasks and stay productive — built with Bootstrap components.</p>
+      </div>
     </div>
 
-    <footer>
-        <p>&copy; 2026 Todo List Application</p>
-        <p>Built with HTML & CSS</p>
+    <!-- Grid: Form + Todo List + Stats -->
+    <div class="row g-4">
+      <!-- Left column: Form + Stats -->
+      <div class="col-12 col-md-5">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Add a Task</h5>
+            <form id="todoForm" class="row g-2" aria-label="Add or edit task">
+              <input type="hidden" id="editingId" value="">
+
+              <div class="col-12 col-sm-7">
+                <input type="text" class="form-control" id="todoInput" placeholder="Add a new task..." aria-label="Task input" required>
+              </div>
+
+              <div class="col-6 col-sm-3">
+                <input type="date" class="form-control" id="todoDue" aria-label="Due date">
+              </div>
+
+              <div class="col-6 col-sm-2">
+                <select id="todoPriority" class="form-select" aria-label="Priority">
+                  <option value="low">Low</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+
+              <div class="col-12 d-grid">
+                <button type="submit" id="addBtn" class="btn btn-primary">Add Task</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Statistics</h5>
+            <table class="table table-striped mb-0 stats-table">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th class="text-end">Count</th>
+                  <th class="text-end">Percentage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Total Tasks</td>
+                  <td id="statTotal" class="text-end">3</td>
+                  <td id="statTotalPct" class="text-end">100%</td>
+                </tr>
+                <tr>
+                  <td>Completed</td>
+                  <td id="statCompleted" class="text-end">1</td>
+                  <td id="statCompletedPct" class="text-end">33%</td>
+                </tr>
+                <tr>
+                  <td>Pending</td>
+                  <td id="statPending" class="text-end">2</td>
+                  <td id="statPendingPct" class="text-end">67%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: Todo List -->
+      <div class="col-12 col-md-7">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-2">
+              <h5 class="card-title mb-0 me-auto">Tasks</h5>
+              <div class="btn-group" role="group" aria-label="Filters">
+                <button class="btn btn-outline-secondary btn-sm active" data-filter="all">All</button>
+                <button class="btn btn-outline-secondary btn-sm" data-filter="active">Active</button>
+                <button class="btn btn-outline-secondary btn-sm" data-filter="completed">Completed</button>
+              </div>
+              <button id="clearCompleted" class="btn btn-link btn-sm ms-2 text-danger">Clear completed</button>
+            </div>
+
+            <ul class="list-group" id="todoList" aria-live="polite" aria-label="Todo list">
+              <!-- Dynamically generated -->
+            </ul>
+
+            <div id="noTasks" class="text-center text-muted small mt-2" style="display:none;">No tasks yet — add one!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="mt-4 text-muted small">
+      <p>&copy; 2026 Todo List Application — Built with HTML &amp; Bootstrap</p>
     </footer>
+  </div>
 
-    <script>
-        // Simple JavaScript to demonstrate interactivity
-        document.getElementById('addBtn').addEventListener('click', function() {
-            const input = document.getElementById('todoInput');
-            if (input.value.trim()) {
-                const li = document.createElement('li');
-                li.className = 'todo-item';
-                li.innerHTML = `
-                    <span class="todo-text">${input.value}</span>
-                    <button class="delete-btn">Delete</button>
-                `;
-                document.getElementById('todoList').appendChild(li);
-                input.value = '';
-                input.focus();
-            }
-        });
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-        // Event delegation for delete buttons
-        document.getElementById('todoList').addEventListener('click', function(e) {
-            if (e.target.classList.contains('delete-btn')) {
-                e.target.closest('.todo-item').remove();
-            }
-            if (e.target.classList.contains('todo-text')) {
-                e.target.closest('.todo-item').classList.toggle('completed');
-            }
-        });
+  <!-- Toast container -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="liveToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toastBody">Task saved</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
 
-        // Allow Enter key to add task
-        document.getElementById('todoInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('addBtn').click();
-            }
-        });
-    </script>
+  <script>
+    // -- Utilities and state
+    const STORAGE_KEY = 'bootstrap_todo_app_v1';
+    let todos = [];
+    let currentFilter = 'all';
+
+    const todoForm = document.getElementById('todoForm');
+    const todoInput = document.getElementById('todoInput');
+    const todoDue = document.getElementById('todoDue');
+    const todoPriority = document.getElementById('todoPriority');
+    const editingId = document.getElementById('editingId');
+    const todoList = document.getElementById('todoList');
+    const noTasks = document.getElementById('noTasks');
+
+    const toastEl = document.getElementById('liveToast');
+    const toastBody = document.getElementById('toastBody');
+    const bootstrapToast = new bootstrap.Toast(toastEl);
+
+    function generateId() { return String(Date.now()) + Math.random().toString(36).slice(2,6); }
+
+    function showToast(message) {
+      toastBody.textContent = message;
+      bootstrapToast.show();
+    }
+
+    // -- Persistence
+    function saveTodos() { localStorage.setItem(STORAGE_KEY, JSON.stringify(todos)); }
+    function loadTodos() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        // seed default tasks
+        todos = [
+          {id: generateId(), text: 'Complete HTML project', completed:false, priority:'medium', due:null, created:Date.now()},
+          {id: generateId(), text: 'Learn CSS3 features', completed:false, priority:'low', due:null, created:Date.now()-1000},
+          {id: generateId(), text: 'Study JavaScript basics', completed:true, priority:'medium', due:null, created:Date.now()-2000}
+        ];
+        saveTodos();
+      } else {
+        try { todos = JSON.parse(raw) || []; } catch (e) { todos = []; }
+      }
+    }
+
+    // -- Rendering
+    function formatDate(d) {
+      if (!d) return '';
+      try { return new Date(d).toLocaleDateString(); } catch(e){return d}
+    }
+
+    function renderTodos() {
+      todoList.innerHTML = '';
+      const filtered = todos.filter(t => {
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'active') return !t.completed;
+        if (currentFilter === 'completed') return t.completed;
+      });
+
+      if (filtered.length === 0) noTasks.style.display = 'block'; else noTasks.style.display = 'none';
+
+      filtered.forEach(todo => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-start';
+        li.dataset.id = todo.id;
+
+        const left = document.createElement('div');
+        left.className = 'me-3 d-flex align-items-center gap-2';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'form-check-input mt-0';
+        checkbox.checked = !!todo.completed;
+        checkbox.setAttribute('aria-label', 'Mark task complete');
+
+        const text = document.createElement('span');
+        text.className = 'todo-text';
+        if (todo.completed) text.classList.add('completed');
+        text.textContent = todo.text;
+
+        left.appendChild(checkbox);
+        left.appendChild(text);
+
+        const meta = document.createElement('small');
+        meta.className = 'text-muted d-block';
+        const parts = [];
+        if (todo.priority) parts.push(`<span class=\"badge bg-${todo.priority==='high'?'danger':todo.priority==='medium'?'warning text-dark':'secondary'}\">${todo.priority}</span>`);
+        if (todo.due) parts.push('Due: ' + formatDate(todo.due));
+        meta.innerHTML = parts.join(' • ');
+        left.appendChild(meta);
+
+        const right = document.createElement('div');
+        right.className = 'btn-group btn-group-sm';
+        right.role = 'group';
+
+        const editBtn = document.createElement('button');
+        editBtn.className = 'btn btn-outline-secondary edit-btn';
+        editBtn.title = 'Edit task';
+        editBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l2.0 2a.5.5 0 0 1 0 .708l-9.439 9.439-2.5.5a.5.5 0 0 1-.58-.58l.5-2.5L12.146.146zM11.207 2L3 10.207V13h2.793L14 4.793 11.207 2z"></path></svg>';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn btn-outline-danger delete-btn';
+        deleteBtn.title = 'Delete task';
+        deleteBtn.textContent = 'Delete';
+
+        right.appendChild(editBtn);
+        right.appendChild(deleteBtn);
+
+        li.appendChild(left);
+        li.appendChild(right);
+
+        // add subtle entrance animation
+        li.style.opacity = '0';
+        todoList.appendChild(li);
+        requestAnimationFrame(() => { li.style.transition = 'opacity 180ms ease, transform 180ms ease'; li.style.opacity = '1'; li.style.transform = 'translateY(0)'; });
+      });
+
+      updateStats();
+    }
+
+    // -- CRUD
+    function addTodoFromForm(e) {
+      e.preventDefault();
+      const text = todoInput.value.trim();
+      if (!text) return;
+      const due = todoDue.value || null;
+      const priority = todoPriority.value || 'medium';
+      const id = editingId.value;
+
+      if (id) {
+        // edit existing
+        const t = todos.find(x => x.id === id);
+        if (t) { t.text = text; t.due = due; t.priority = priority; showToast('Task updated'); }
+        editingId.value = '';
+        addBtn.textContent = 'Add Task';
+      } else {
+        todos.push({id: generateId(), text, completed:false, priority, due, created: Date.now()});
+        showToast('Task added');
+      }
+
+      todoForm.reset();
+      saveTodos();
+      renderTodos();
+    }
+
+    function startEdit(id) {
+      const t = todos.find(x => x.id === id); if (!t) return;
+      editingId.value = t.id;
+      todoInput.value = t.text;
+      todoDue.value = t.due || '';
+      todoPriority.value = t.priority || 'medium';
+      addBtn.textContent = 'Save Changes';
+      todoInput.focus();
+    }
+
+    function deleteTodoById(id) {
+      todos = todos.filter(t => t.id !== id);
+      saveTodos();
+      renderTodos();
+      showToast('Task deleted');
+    }
+
+    function toggleCompleteById(id, checked) {
+      const t = todos.find(x => x.id === id); if (!t) return;
+      t.completed = !!checked;
+      saveTodos();
+      renderTodos();
+    }
+
+    // -- Events
+    todoForm.addEventListener('submit', addTodoFromForm);
+
+    todoList.addEventListener('click', (e) => {
+      const li = e.target.closest('.list-group-item'); if (!li) return;
+      const id = li.dataset.id;
+
+      if (e.target.classList.contains('delete-btn')) {
+        deleteTodoById(id); return;
+      }
+      if (e.target.classList.contains('edit-btn') || e.target.closest('.edit-btn')) {
+        startEdit(id); return;
+      }
+      if (e.target.type === 'checkbox') {
+        toggleCompleteById(id, e.target.checked); return;
+      }
+    });
+
+    // Filters
+    document.querySelectorAll('[data-filter]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentFilter = e.target.dataset.filter;
+        renderTodos();
+      });
+    });
+
+    // Clear completed
+    document.getElementById('clearCompleted').addEventListener('click', () => {
+      const before = todos.length;
+      todos = todos.filter(t => !t.completed);
+      saveTodos();
+      renderTodos();
+      showToast('Cleared completed tasks');
+    });
+
+    // Stats
+    function updateStats() {
+      const total = todos.length;
+      const completed = todos.filter(t => t.completed).length;
+      const pending = total - completed;
+      const pct = total ? Math.round((completed / total) * 100) : 0;
+
+      document.getElementById('statTotal').textContent = total;
+      document.getElementById('statCompleted').textContent = completed;
+      document.getElementById('statPending').textContent = pending;
+      document.getElementById('statTotalPct').textContent = total ? '100%' : '0%';
+      document.getElementById('statCompletedPct').textContent = pct + '%';
+      document.getElementById('statPendingPct').textContent = (100 - pct) + '%';
+    }
+
+    // Init
+    loadTodos();
+    renderTodos();
+  </script>
 </body>
 </html>
